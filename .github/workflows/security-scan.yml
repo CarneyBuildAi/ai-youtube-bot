@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,11 +31,10 @@ jobs:
     
     - name: Check dependencies with Safety
       run: |
-        pip install -r requirements.txt
-        safety check --json || true
+        if [ -f requirements.txt ]; then pip install -r requirements.txt && safety check --json || true; else echo "No requirements.txt found"; fi
     
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports
